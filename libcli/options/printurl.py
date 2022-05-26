@@ -30,7 +30,7 @@ class PrintUrlAction(BaseAction):
 
         with contextlib.suppress(importlib.metadata.PackageNotFoundError):
             # https://packaging.python.org/en/latest/specifications/core-metadata/#project-url-multiple-use
-            distro = importlib.metadata.distribution(parser.prog)
+            distro = importlib.metadata.distribution(namespace.cli.distname)
             print(distro.metadata.get("Project-URL", ""))
 
         parser.exit()

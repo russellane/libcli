@@ -93,6 +93,8 @@ class BaseCLI:
             # encouraged:
             # regardless: of `config-file`.
             "config-name": None,
+            # distribution name, not importable package name
+            "dist-name": None,
             # --verbose
             "verbose": 0,
         }
@@ -378,7 +380,7 @@ class BaseCLI:
         version = "0.0.0"
         with contextlib.suppress(importlib.metadata.PackageNotFoundError):
             # https://docs.python.org/3/library/importlib.metadata.html#distribution-versions
-            version = importlib.metadata.version(self.parser.prog)
+            version = importlib.metadata.version(self.distname)
 
         parser.add_argument(
             "-V",
@@ -387,6 +389,12 @@ class BaseCLI:
             version=version,
             help="print version number and exit",
         )
+
+    @property
+    def distname(self) -> str:
+        """Return `name` for `importlib.metadata` functions."""
+
+        return self.config.get("dist-name") or self.config.get("config-name") or self.parser.prog
 
     def _add_config_option(self, parser: argparse.ArgumentParser) -> None:
         """Add `--config FILE` to given `parser`."""
