@@ -81,3 +81,9 @@ def test_print_url():
     with pytest.raises(SystemExit) as err:
         main(["--print-url"])
     assert err.value.code == 0
+
+
+def test_debug():
+    with pytest.raises(SystemExit) as err:
+        main(["-X"])
+    assert err.value.code == 0

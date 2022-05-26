@@ -10,7 +10,6 @@ import pkgutil
 import sys
 import textwrap
 from pathlib import Path
-from pprint import pformat
 from typing import Callable, List, Optional
 
 import argcomplete
@@ -32,6 +31,9 @@ from libcli.actions.longhelp import LongHelpAction
 from libcli.actions.longmarkdown import LongMarkdownHelpAction
 from libcli.actions.markdown import MarkdownHelpAction
 from libcli.formatters.color import ColorHelpFormatter
+from libcli.options.debug import DebugOption
+from libcli.options.printconfig import PrintConfigOption
+from libcli.options.printurl import PrintUrlOption
 
 # pylint: disable=protected-access
 
@@ -325,11 +327,7 @@ class BaseCLI:
 
         group = parser.add_argument_group("General options")
 
-        group.add_argument(
-            "-X",
-            action=DebugAction,
-            help=argparse.SUPPRESS,
-        )
+        DebugOption(group)
 
         group.add_argument(
             "-h",
@@ -359,17 +357,8 @@ class BaseCLI:
         if self.config.get("config-file"):
             self._add_config_option(group)
 
-        group.add_argument(
-            "--print-config",
-            action=PrintConfigAction,
-            help="print effective config and exit",
-        )
-
-        group.add_argument(
-            "--print-url",
-            action=PrintUrlAction,
-            help="print project url and exit",
-        )
+        PrintConfigOption(group)
+        PrintUrlOption(group)
 
     @staticmethod
     def _add_verbose_option(parser: argparse.ArgumentParser) -> None:
@@ -383,14 +372,13 @@ class BaseCLI:
             help="`-v` for detailed output and `-vv` for more detailed",
         )
 
-    @staticmethod
-    def _add_version_option(parser: argparse.ArgumentParser) -> None:
+    def _add_version_option(self, parser: argparse.ArgumentParser) -> None:
         """Add `--version` to given `parser`."""
 
         version = "0.0.0"
         with contextlib.suppress(importlib.metadata.PackageNotFoundError):
             # https://docs.python.org/3/library/importlib.metadata.html#distribution-versions
-            version = importlib.metadata.version(__package__)
+            version = importlib.metadata.version(self.parser.prog)
 
         parser.add_argument(
             "-V",
@@ -455,61 +443,3 @@ class BaseCLI:
             if name not in self.exclude_print_config:
                 optname = name.replace("-", "_")
                 self.config[name] = getattr(options, optname, value)
-
-    def _print_config(self, options):
-
-        config = {}
-        for name, value in self.config.items():
-            if name not in self.exclude_print_config:
-                optname = name.replace("-", "_")
-                value = getattr(options, optname, value)
-                config[name] = value if isinstance(value, (int, str)) else str(value)
-
-        if (name := self.config.get("config-name")) is not None:
-            config = {name: config}
-        print(pformat(config))
-
-    @staticmethod
-    def _print_url() -> None:
-
-        # https://packaging.python.org/en/latest/specifications/core-metadata/#project-url-multiple-use
-        distro = importlib.metadata.distribution(__package__)
-        project_url = distro.metadata.get("Project-URL")
-        print(project_url)
-
-
-class DebugAction(BaseHelpAction):
-    """Print internal data structures."""
-
-    def __call__(self, parser, namespace, values, option_string=None):
-        """Print internal data structures."""
-
-        if "ic" in globals():
-            ic(namespace.cli.__dict__)
-            ic(parser.__dict__)
-            ic(namespace)
-        else:
-            print(pformat(namespace.cli.__dict__))
-            print(pformat(parser.__dict__))
-            print(pformat(namespace))
-        parser.exit()
-
-
-class PrintConfigAction(BaseHelpAction):
-    """Print effective config and exit."""
-
-    def __call__(self, parser, namespace, values, option_string=None):
-        """Print effective config and exit."""
-
-        namespace.cli._print_config(namespace)
-        parser.exit()
-
-
-class PrintUrlAction(BaseHelpAction):
-    """Print project url and exit."""
-
-    def __call__(self, parser, namespace, values, option_string=None):
-        """Print project url and exit."""
-
-        namespace.cli._print_url()
-        parser.exit()
