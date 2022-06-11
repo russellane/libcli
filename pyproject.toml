@@ -15,7 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
     "ansicolors>=1.1.8",
     "argcomplete>=2.0.0",
@@ -29,16 +29,17 @@ Homepage = "https://github.com/russellane/libcli"
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "black>=22.1.0",
-    "flake8-bugbear>=22.1.11",
+    "black>=22.3.0",
+    "flake8-bugbear>=22.4.25",
     "flake8-pydocstyle>=0.2.0",
     "flake8-pylint>=0.1.3",
     "flake8-pytest-style>=1.6.0",
-    "flake8-simplify>=0.18.0",
+    "flake8-simplify>=0.19.2",
     "flake8>=4.0.1",
     "isort>=5.10.1",
     "pytest-cov>=3.0.0",
-    "pytest>=7.0.1",
+    "pytest>=7.1.2",
+    "toml>=0.10.2",
 ]
 
 [tool.black]
@@ -54,9 +55,6 @@ max-line-length = "97"
 [tool.pylint.messages_control]
 enable = ["useless-suppression"]
 fail-on = ["I0021"]             # useless-suppression
-disable = [
-    "C0330", "C0326",           # black
-]
 
 [tool.pydocstyle]
 convention = "google"
