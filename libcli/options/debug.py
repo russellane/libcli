@@ -3,7 +3,7 @@
 import argparse
 from pprint import pformat
 
-from libcli.actions.base import BaseAction
+from libcli.actions.basehelp import BaseHelpAction
 from libcli.options.base import BaseOption
 
 
@@ -21,7 +21,7 @@ class DebugOption(BaseOption):
         )
 
 
-class DebugAction(BaseAction):
+class DebugAction(BaseHelpAction):
     """Print diagnostics and exit."""
 
     def __call__(self, parser, namespace, values, option_string=None):

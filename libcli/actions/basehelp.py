@@ -1,8 +1,9 @@
 """Base class for our `HelpAction`s."""
 
-from libcli.actions.base import BaseAction
+import argparse
 
 
-class BaseHelpAction(BaseAction):
+class BaseHelpAction(argparse._HelpAction):
+    # pylint: disable=protected-access
     # pylint: disable=too-few-public-methods
     """Base class for our `HelpAction`s."""

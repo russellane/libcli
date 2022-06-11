@@ -4,7 +4,7 @@ import argparse
 import contextlib
 import importlib.metadata
 
-from libcli.actions.base import BaseAction
+from libcli.actions.basehelp import BaseHelpAction
 from libcli.options.base import BaseOption
 
 
@@ -22,7 +22,7 @@ class PrintUrlOption(BaseOption):
         )
 
 
-class PrintUrlAction(BaseAction):
+class PrintUrlAction(BaseHelpAction):
     """Print `Project-URL` and exit."""
 
     def __call__(self, parser, namespace, values, option_string=None):
