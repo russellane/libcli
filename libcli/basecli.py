@@ -31,6 +31,7 @@ from libcli.actions.longhelp import LongHelpAction
 from libcli.actions.longmarkdown import LongMarkdownHelpAction
 from libcli.actions.markdown import MarkdownHelpAction
 from libcli.formatters.color import ColorHelpFormatter
+from libcli.options.completion import CompletionOption
 from libcli.options.debug import DebugOption
 from libcli.options.printconfig import PrintConfigOption
 from libcli.options.printurl import PrintUrlOption
@@ -361,6 +362,7 @@ class BaseCLI:
 
         PrintConfigOption(group)
         PrintUrlOption(group)
+        CompletionOption(group)
 
     @staticmethod
     def _add_verbose_option(parser: argparse.ArgumentParser) -> None:

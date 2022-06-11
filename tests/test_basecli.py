@@ -87,3 +87,22 @@ def test_debug():
     with pytest.raises(SystemExit) as err:
         main(["-X"])
     assert err.value.code == 0
+
+
+def test_completion():
+    with pytest.raises(SystemExit) as err:
+        main(["--completion"])
+    assert err.value.code == 0
+
+
+def test_completion_bogus():
+    with pytest.raises(SystemExit) as err:
+        main(["--completion", "bogus"])
+    assert err.value.code == 2
+
+
+@pytest.mark.parametrize("shell", ["bash", "fish", "tcsh"])
+def test_completion_shell(shell):
+    with pytest.raises(SystemExit) as err:
+        main(["--completion", shell])
+    assert err.value.code == 0
