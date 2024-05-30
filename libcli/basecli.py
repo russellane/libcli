@@ -306,7 +306,9 @@ class BaseCLI:
         self.debug(f"reading config-file `{self.options.config_file}`.")
 
         try:
-            config = tomli.loads(self.options.config_file.read_text())
+            _path = Path(self.options.config_file).expanduser()
+            _text = _path.read_text(encoding="utf-8")
+            config = tomli.loads(_text)
         except FileNotFoundError as err:
             if self.options.config_file != self.config["config-file"]:
                 # postpone calling `parser.error` to full parser.

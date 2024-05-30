@@ -54,7 +54,7 @@ cov_html::
 		xdg-open htmlcov/index.html
 
 clean::
-		rm -rf .coverage .pytest_cache __pypackages__ dist htmlcov tags 
+		rm -rf .coverage .pdm-build .pytest_cache __pypackages__ dist htmlcov tags 
 		find . -type f -name '*.py[co]' -delete
 		find . -type d -name __pycache__ -delete
 
