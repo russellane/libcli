@@ -26,7 +26,7 @@ class MarkdownHelpFormatter(argparse.RawDescriptionHelpFormatter):
     #     return re.sub(pattern, _escape_char, raw_text)
 
     @staticmethod
-    def _md_heading(text, level):
+    def _md_heading(text, level) -> str:
         level = min(max(level, 0), 6)
         return "#" * level + " " + text if level else text
 
@@ -70,7 +70,7 @@ class MarkdownHelpFormatter(argparse.RawDescriptionHelpFormatter):
         ):
             self._md_title += " - " + description
 
-    def _format_usage(self, usage, actions, groups, prefix):
+    def _format_usage(self, usage, actions, groups, prefix) -> str:
 
         usage_text = super()._format_usage(usage, actions, groups, prefix)
 
@@ -89,14 +89,14 @@ class MarkdownHelpFormatter(argparse.RawDescriptionHelpFormatter):
             + "\n"
         )
 
-    def format_help(self):
+    def format_help(self) -> str:
         """Format help."""
         self._root_section.heading = self._md_heading(
             self._md_title, level=self._md_level["title"]
         )
         return super().format_help()
 
-    def start_section(self, heading):
+    def start_section(self, heading) -> None:
         """Start section."""
         if heading.startswith("options") or heading.startswith("positional arguments"):
             heading = heading.title()

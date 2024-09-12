@@ -2,6 +2,7 @@
 
 import argparse
 from pprint import pformat
+from typing import Any
 
 from libcli.actions.basehelp import BaseHelpAction
 from libcli.options.base import BaseOption
@@ -11,7 +12,7 @@ class PrintConfigOption(BaseOption):
     # pylint: disable=too-few-public-methods
     """Print effective config and exit."""
 
-    def __init__(self, parser: argparse.ArgumentParser) -> None:
+    def __init__(self, parser: argparse.ArgumentParser | argparse._ArgumentGroup) -> None:
         """Print effective config and exit."""
 
         parser.add_argument(
@@ -24,10 +25,16 @@ class PrintConfigOption(BaseOption):
 class PrintConfigAction(BaseHelpAction):
     """Print effective config and exit."""
 
-    def __call__(self, parser, namespace, values, option_string=None):
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        namespace: argparse.Namespace,
+        values,
+        option_string=None,
+    ) -> None:
         """Print effective config and exit."""
 
-        config = {}
+        config: dict[str, Any] = {}
         for name, value in namespace.cli.config.items():
             if name not in namespace.cli.exclude_print_config:
                 optname = name.replace("-", "_")

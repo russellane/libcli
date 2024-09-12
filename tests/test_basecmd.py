@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List, Optional
 
 import pytest
 
@@ -39,9 +38,9 @@ class ComplexCLI(BaseCLI):
         self.options.cmd()
 
 
-def main(args: Optional[List[str]] = None) -> None:
+def main(args: list[str] | None = None) -> None:
     """Command line interface entry point (function)."""
-    return ComplexCLI(args).main()
+    ComplexCLI(args).main()
 
 
 class FirstCmd(BaseCmd):

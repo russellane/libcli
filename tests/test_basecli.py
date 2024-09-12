@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 import pytest
 
 from libcli import BaseCLI
@@ -30,9 +28,9 @@ class SimpleCLI(BaseCLI):
         print("Running", self)
 
 
-def main(args: Optional[List[str]] = None) -> None:
+def main(args: list[str] | None = None) -> None:
     """Command line interface entry point (function)."""
-    return SimpleCLI(args).main()
+    SimpleCLI(args).main()
 
 
 def test_version():

@@ -5,7 +5,7 @@ import functools
 import re
 from typing import Iterable
 
-from colors.colors import color as _color
+from colors.colors import color as _color  # type: ignore
 
 _color_code_span = functools.partial(_color, fg="yellow")
 _color_header = functools.partial(_color, fg="cyan")
@@ -32,9 +32,9 @@ class ColorHelpFormatter(argparse.RawDescriptionHelpFormatter):
 
     def _format_usage(
         self,
-        usage: str,
+        usage: str | None,
         actions: Iterable[argparse.Action],
-        groups: Iterable[argparse._ArgumentGroup],
+        groups: Iterable[argparse._MutuallyExclusiveGroup],
         prefix: str | None,
     ) -> str:
         if prefix is None:
@@ -91,7 +91,7 @@ class ColorHelpFormatter(argparse.RawDescriptionHelpFormatter):
         # return a single string
         return self._join_parts(parts)
 
-    def add_text(self, text):
+    def add_text(self, text) -> None:
         """Colorize and add `text` to section."""
         if text:
             text = _colorize_text(text)

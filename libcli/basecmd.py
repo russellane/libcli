@@ -12,24 +12,25 @@ class BaseCmd:
         """Initialize base command instance."""
 
         self.cli = cli
-        self.options: argparse.Namespace = None
+        self.options: argparse.Namespace
         self.init_command()
 
-    def init_command(self):
+    def init_command(self) -> None:
         """Implement in subclass to call `add_parser` and `add_argument`."""
         # raise NotImplementedError
 
-    def add_subcommand_parser(self, name, **kwargs) -> argparse._SubParsersAction:
+    def add_subcommand_parser(self, name, **kwargs) -> argparse.ArgumentParser:
         """Add subcommand to main parser and return subcommand's subparser.
 
         Wrap `ArgumentParser.add_subparsers.add_parser`.
         """
 
+        assert self.cli.add_parser
         parser = self.cli.add_parser(name, **kwargs)
         parser.set_defaults(cmd=lambda: self._promote_options(self.run), prog=name)
         return parser
 
-    def _promote_options(self, run):
+    def _promote_options(self, run) -> None:
         self.options = self.cli.options
         run()
 

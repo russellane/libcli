@@ -11,7 +11,7 @@ class DebugOption(BaseOption):
     # pylint: disable=too-few-public-methods
     """Print diagnostics and exit."""
 
-    def __init__(self, parser: argparse.ArgumentParser) -> None:
+    def __init__(self, parser: argparse.ArgumentParser | argparse._ArgumentGroup) -> None:
         """Print diagnostics and exit."""
 
         parser.add_argument(
@@ -24,13 +24,19 @@ class DebugOption(BaseOption):
 class DebugAction(BaseHelpAction):
     """Print diagnostics and exit."""
 
-    def __call__(self, parser, namespace, values, option_string=None):
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        namespace: argparse.Namespace,
+        values,
+        option_string=None,
+    ) -> None:
         """Print diagnostics and exit."""
 
         if "ic" in globals():
-            ic(namespace.cli.__dict__)  # noqa
-            ic(parser.__dict__)  # noqa
-            ic(namespace)  # noqa
+            ic(namespace.cli.__dict__)  # type: ignore # noqa
+            ic(parser.__dict__)  # type: ignore # noqa
+            ic(namespace)  # type: ignore # noqa
         else:
             print(pformat(namespace.cli.__dict__))
             print(pformat(parser.__dict__))

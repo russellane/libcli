@@ -11,7 +11,7 @@ class CompletionOption(BaseOption):
     # pylint: disable=too-few-public-methods
     """Print completion scripts for `SHELL` and exit."""
 
-    def __init__(self, parser: argparse.ArgumentParser) -> None:
+    def __init__(self, parser: argparse.ArgumentParser | argparse._ArgumentGroup) -> None:
         """Print completion scripts for `SHELL` and exit."""
 
         arg = parser.add_argument(
@@ -28,7 +28,7 @@ class CompletionOption(BaseOption):
 class CompletionAction(BaseAction):
     """Print completion scripts for `SHELL` and exit."""
 
-    def __call__(self, parser, namespace, values, option_string=None):
+    def __call__(self, parser, namespace, values, option_string=None) -> None:
         """Print completion scripts for `SHELL` and exit."""
 
         argv = ["register-python-argcomplete", "-s", values or namespace.shell, parser.prog]

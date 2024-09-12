@@ -12,7 +12,7 @@ class PrintUrlOption(BaseOption):
     # pylint: disable=too-few-public-methods
     """Print `Project-URL` and exit."""
 
-    def __init__(self, parser: argparse.ArgumentParser) -> None:
+    def __init__(self, parser: argparse.ArgumentParser | argparse._ArgumentGroup) -> None:
         """Print `Project-URL` and exit."""
 
         parser.add_argument(
@@ -25,12 +25,19 @@ class PrintUrlOption(BaseOption):
 class PrintUrlAction(BaseHelpAction):
     """Print `Project-URL` and exit."""
 
-    def __call__(self, parser, namespace, values, option_string=None):
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        namespace: argparse.Namespace,
+        values,
+        option_string=None,
+    ) -> None:
         """Print `Project-URL` and exit."""
 
         with contextlib.suppress(importlib.metadata.PackageNotFoundError):
             # https://packaging.python.org/en/latest/specifications/core-metadata/#project-url-multiple-use
             distro = importlib.metadata.distribution(namespace.cli.distname)
-            print(distro.metadata.get("Project-URL", ""))
+            if distro is not None and distro.metadata is not None:
+                print(distro.metadata.json.get("Project-URL", ""))
 
         parser.exit()

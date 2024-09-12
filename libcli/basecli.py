@@ -10,17 +10,17 @@ import pkgutil
 import sys
 import textwrap
 from pathlib import Path
-from typing import Callable, List, Optional
+from typing import Callable
 
 import argcomplete
 import tomli
-from colors.colors import color
+from colors.colors import color  # type: ignore
 
 with contextlib.suppress(ImportError):
-    from loguru import logger  # noqa
+    from loguru import logger  # type: ignore
 
 with contextlib.suppress(ImportError):
-    import icecream  # noqa
+    import icecream  # type: ignore
     from icecream import ic  # noqa
 
     icecream.install()
@@ -42,17 +42,17 @@ from libcli.options.printurl import PrintUrlOption
 class BaseCLI:
     """Command line interface base class."""
 
-    argv: [str] = []
+    argv: list[str] | None = []
     config: dict = {}
-    exclude_print_config: [str] = []
-    parser: argparse.ArgumentParser = None
-    options: argparse.Namespace = None
-    add_parser: Callable = None
+    exclude_print_config: list[str] = []
+    parser: argparse.ArgumentParser
+    options: argparse.Namespace
+    add_parser: Callable | None = None
     help_first_char = "upper"
     help_line_ending = "."
     init_logging_called = False
 
-    def __init__(self, argv: Optional[List[str]] = None) -> None:
+    def __init__(self, argv: list[str] | None = None) -> None:
         """Build and parse command line.
 
         Args:
@@ -165,8 +165,8 @@ class BaseCLI:
     def add_subcommand_modules(
         self,
         modname: str,
-        prefix: str = None,
-        suffix: str = None,
+        prefix: str | None = None,
+        suffix: str | None = None,
     ) -> None:
         """Add all subcommands in module `modname`.
 
@@ -221,7 +221,7 @@ class BaseCLI:
                     continue
                 cmd_class(self)
 
-    def init_subcommands(self, **kwargs):
+    def init_subcommands(self, **kwargs) -> None:
         """Prepare to add subcommands to main parser."""
 
         subparsers = self.parser.add_subparsers(**kwargs)
@@ -229,8 +229,8 @@ class BaseCLI:
 
     def add_default_to_help(
         self,
-        arg: argparse.Action,
-        parser: argparse.ArgumentParser = None,
+        arg,
+        parser=None,
     ) -> None:
         """Add default value to help text for `arg` in `parser`."""
 
@@ -253,7 +253,7 @@ class BaseCLI:
         else:
             arg.help += default
 
-    def normalize_help_text(self, text: str) -> str:
+    def normalize_help_text(self, text: str | None) -> str | None:
         """Return help `text` with normalized first-character and line-ending."""
 
         if text and text != argparse.SUPPRESS:
@@ -367,7 +367,7 @@ class BaseCLI:
         CompletionOption(group)
 
     @staticmethod
-    def _add_verbose_option(parser: argparse.ArgumentParser) -> None:
+    def _add_verbose_option(parser: argparse.ArgumentParser | argparse._ArgumentGroup) -> None:
         """Add `--verbose` to given `parser`."""
 
         parser.add_argument(
@@ -378,7 +378,9 @@ class BaseCLI:
             help="`-v` for detailed output and `-vv` for more detailed",
         )
 
-    def _add_version_option(self, parser: argparse.ArgumentParser) -> None:
+    def _add_version_option(
+        self, parser: argparse.ArgumentParser | argparse._ArgumentGroup
+    ) -> None:
         """Add `--version` to given `parser`."""
 
         version = "0.0.0"
@@ -400,7 +402,9 @@ class BaseCLI:
 
         return self.config.get("dist-name") or self.config.get("config-name") or self.parser.prog
 
-    def _add_config_option(self, parser: argparse.ArgumentParser) -> None:
+    def _add_config_option(
+        self, parser: argparse.ArgumentParser | argparse._ArgumentGroup
+    ) -> None:
         """Add `--config FILE` to given `parser`."""
 
         arg = parser.add_argument(
@@ -449,7 +453,7 @@ class BaseCLI:
         self._update_config_from_options(options)
         return options
 
-    def _update_config_from_options(self, options):
+    def _update_config_from_options(self, options) -> None:
 
         for name, value in self.config.items():
             if name not in self.exclude_print_config:

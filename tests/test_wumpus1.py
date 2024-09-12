@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 import pytest
 
 from libcli import BaseCLI
@@ -38,9 +36,9 @@ class WumpusCLI(BaseCLI):
         self.options.cmd()
 
 
-def main(args: Optional[List[str]] = None) -> None:
+def main(args: list[str] | None = None) -> None:
     """Command line interface entry point (function)."""
-    return WumpusCLI(args).main()
+    WumpusCLI(args).main()
 
 
 if __name__ == "__main__":
