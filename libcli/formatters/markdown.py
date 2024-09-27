@@ -3,6 +3,7 @@
 import argparse
 import re
 from pathlib import Path
+from typing import Any, Iterable
 
 import tomli
 
@@ -26,9 +27,10 @@ class MarkdownHelpFormatter(argparse.RawDescriptionHelpFormatter):
     #     return re.sub(pattern, _escape_char, raw_text)
 
     @staticmethod
-    def _md_heading(text, level) -> str:
+    def _md_heading(text: str | None, level: int) -> str:
         level = min(max(level, 0), 6)
-        return "#" * level + " " + text if level else text
+        _text = str(text) if text else ""
+        return str("#" * level + " " + _text) if level else _text
 
     # def md_inline_code(raw_text):
     #     return "`%s`" % _md_escape(raw_text, characters="`")
@@ -47,10 +49,10 @@ class MarkdownHelpFormatter(argparse.RawDescriptionHelpFormatter):
 
     def __init__(
         self,
-        prog,
-        indent_increment=2,
-        max_help_position=24,
-        width=None,
+        prog: str,
+        indent_increment: int = 2,
+        max_help_position: int = 24,
+        width: int | None = None,
     ):
         """Initialize MarkdownHelpFormatter."""
         self._md_level = {
@@ -70,7 +72,13 @@ class MarkdownHelpFormatter(argparse.RawDescriptionHelpFormatter):
         ):
             self._md_title += " - " + description
 
-    def _format_usage(self, usage, actions, groups, prefix) -> str:
+    def _format_usage(
+        self,
+        usage: str | None,
+        actions: Iterable[argparse.Action],
+        groups: Any,
+        prefix: str | None,
+    ) -> str:
 
         usage_text = super()._format_usage(usage, actions, groups, prefix)
 
@@ -96,9 +104,11 @@ class MarkdownHelpFormatter(argparse.RawDescriptionHelpFormatter):
         )
         return super().format_help()
 
-    def start_section(self, heading) -> None:
+    def start_section(self, heading: str | None) -> None:
         """Start section."""
-        if heading.startswith("options") or heading.startswith("positional arguments"):
+        if heading and (
+            heading.startswith("options") or heading.startswith("positional arguments")
+        ):
             heading = heading.title()
         super().start_section(self._md_heading(heading, level=self._md_level["heading"]))
 

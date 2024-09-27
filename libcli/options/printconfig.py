@@ -29,8 +29,8 @@ class PrintConfigAction(BaseHelpAction):
         self,
         parser: argparse.ArgumentParser,
         namespace: argparse.Namespace,
-        values,
-        option_string=None,
+        _values: Any,
+        _option_string: Any | None = None,
     ) -> None:
         """Print effective config and exit."""
 

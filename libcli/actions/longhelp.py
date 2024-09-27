@@ -1,6 +1,7 @@
 """Print help for all commands."""
 
 import argparse
+from typing import Any, Sequence
 
 from libcli.actions.basehelp import BaseHelpAction
 
@@ -12,12 +13,12 @@ class LongHelpAction(BaseHelpAction):
         self,
         parser: argparse.ArgumentParser,
         namespace: argparse.Namespace,
-        values,
-        option_string=None,
+        _values: str | Sequence[Any] | None,
+        _option_string: str | None = None,
     ) -> None:
         """Print help for all commands."""
 
-        def _print_help(parser) -> None:
+        def _print_help(parser: argparse.ArgumentParser) -> None:
             print(f" {parser.prog.upper()} ".center(80, "-") + "\n")
             print(parser.format_help())
 

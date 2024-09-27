@@ -1,6 +1,7 @@
 """Print help in markdown."""
 
 import argparse
+from typing import Any, Sequence
 
 from libcli.actions.basehelp import BaseHelpAction
 from libcli.formatters.markdown import MarkdownHelpFormatter
@@ -13,8 +14,8 @@ class MarkdownHelpAction(BaseHelpAction):
         self,
         parser: argparse.ArgumentParser,
         namespace: argparse.Namespace,
-        values,
-        option_string=None,
+        _values: str | Sequence[Any] | None,
+        _option_string: str | None = None,
     ) -> None:
         """Print help in markdown."""
 

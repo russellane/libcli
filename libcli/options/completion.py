@@ -2,6 +2,7 @@
 
 import argparse
 import subprocess
+from typing import Any, Sequence
 
 from libcli.actions.base import BaseAction
 from libcli.options.base import BaseOption
@@ -28,9 +29,20 @@ class CompletionOption(BaseOption):
 class CompletionAction(BaseAction):
     """Print completion scripts for `SHELL` and exit."""
 
-    def __call__(self, parser, namespace, values, option_string=None) -> None:
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        namespace: argparse.Namespace,
+        values: str | Sequence[Any] | None,
+        _option_string: str | None = None,
+    ) -> None:
         """Print completion scripts for `SHELL` and exit."""
 
-        argv = ["register-python-argcomplete", "-s", values or namespace.shell, parser.prog]
+        argv = [
+            "register-python-argcomplete",
+            "-s",
+            values if values else namespace.shell,
+            parser.prog,
+        ]
         proc = subprocess.run(argv, check=False)
         parser.exit(proc.returncode)

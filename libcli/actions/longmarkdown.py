@@ -1,6 +1,7 @@
 """Print help for all commands in markdown."""
 
 import argparse
+from typing import Any, Sequence
 
 from libcli.actions.basehelp import BaseHelpAction
 
@@ -12,12 +13,12 @@ class LongMarkdownHelpAction(BaseHelpAction):
         self,
         parser: argparse.ArgumentParser,
         namespace: argparse.Namespace,
-        values,
-        option_string=None,
+        _values: str | Sequence[Any] | None,
+        _option_string: str | None = None,
     ) -> None:
         """Print help for all commands in markdown."""
 
-        def _print_help(parser, atx: str) -> None:
+        def _print_help(parser: argparse.ArgumentParser, atx: str) -> None:
             print(atx, parser.prog)
             print("```\n" + parser.format_help().rstrip() + "\n```\n")
 

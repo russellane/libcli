@@ -3,6 +3,7 @@
 import argparse
 import contextlib
 import importlib.metadata
+from typing import Any
 
 from libcli.actions.basehelp import BaseHelpAction
 from libcli.options.base import BaseOption
@@ -29,8 +30,8 @@ class PrintUrlAction(BaseHelpAction):
         self,
         parser: argparse.ArgumentParser,
         namespace: argparse.Namespace,
-        values,
-        option_string=None,
+        _values: Any,
+        _option_string: Any = None,
     ) -> None:
         """Print `Project-URL` and exit."""
 

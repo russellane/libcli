@@ -1,6 +1,7 @@
 """Base command class."""
 
 import argparse
+from typing import Any, Callable
 
 from libcli.basecli import BaseCLI
 
@@ -19,7 +20,7 @@ class BaseCmd:
         """Implement in subclass to call `add_parser` and `add_argument`."""
         # raise NotImplementedError
 
-    def add_subcommand_parser(self, name, **kwargs) -> argparse.ArgumentParser:
+    def add_subcommand_parser(self, name: str, **kwargs: Any) -> argparse.ArgumentParser:
         """Add subcommand to main parser and return subcommand's subparser.
 
         Wrap `ArgumentParser.add_subparsers.add_parser`.
@@ -30,7 +31,7 @@ class BaseCmd:
         parser.set_defaults(cmd=lambda: self._promote_options(self.run), prog=name)
         return parser
 
-    def _promote_options(self, run) -> None:
+    def _promote_options(self, run: Callable[[], None]) -> None:
         self.options = self.cli.options
         run()
 

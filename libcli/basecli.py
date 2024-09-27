@@ -10,7 +10,7 @@ import pkgutil
 import sys
 import textwrap
 from pathlib import Path
-from typing import Callable
+from typing import Any, Callable
 
 import argcomplete
 import tomli
@@ -43,11 +43,11 @@ class BaseCLI:
     """Command line interface base class."""
 
     argv: list[str] | None = []
-    config: dict = {}
+    config: dict[Any, Any] = {}
     exclude_print_config: list[str] = []
     parser: argparse.ArgumentParser
     options: argparse.Namespace
-    add_parser: Callable | None = None
+    add_parser: Callable[[Any], argparse.ArgumentParser] | None = None
     help_first_char = "upper"
     help_line_ending = "."
     init_logging_called = False
@@ -141,15 +141,15 @@ class BaseCLI:
     def add_arguments(self) -> None:
         """Implement in subclass, probably desired."""
 
-    def ArgumentParser(self, **kwargs) -> argparse.ArgumentParser:  # noqa: snake-case
+    def ArgumentParser(self, **kwargs: str) -> argparse.ArgumentParser:  # noqa: snake-case
         """Initialize `self.parser`."""
 
-        kwargs["add_help"] = False
-        self.parser = argparse.ArgumentParser(**kwargs)
+        kwargs["add_help"] = False  # type: ignore[assignment]
+        self.parser = argparse.ArgumentParser(**kwargs)  # type: ignore[arg-type]
         self.parser.set_defaults(cli=self)
         return self.parser
 
-    def add_subcommand_classes(self, subcommand_classes) -> None:
+    def add_subcommand_classes(self, subcommand_classes: list[Any]) -> None:
         """Add list of subcommands to this parser."""
 
         # https://docs.python.org/3/library/argparse.html#sub-commands
@@ -221,7 +221,7 @@ class BaseCLI:
                     continue
                 cmd_class(self)
 
-    def init_subcommands(self, **kwargs) -> None:
+    def init_subcommands(self, **kwargs: Any) -> None:
         """Prepare to add subcommands to main parser."""
 
         subparsers = self.parser.add_subparsers(**kwargs)
@@ -229,8 +229,8 @@ class BaseCLI:
 
     def add_default_to_help(
         self,
-        arg,
-        parser=None,
+        arg: argparse.Action,
+        parser: argparse.ArgumentParser | argparse._ArgumentGroup | None = None,
     ) -> None:
         """Add default value to help text for `arg` in `parser`."""
 
@@ -248,7 +248,7 @@ class BaseCLI:
                 default = "~" + default[len(home) :]
         default = f" (default: `{default}`)"
 
-        if arg.help.endswith(self.help_line_ending):
+        if arg.help and arg.help.endswith(self.help_line_ending):
             arg.help = arg.help[: -len(self.help_line_ending)] + default + self.help_line_ending
         else:
             arg.help += default
@@ -453,7 +453,7 @@ class BaseCLI:
         self._update_config_from_options(options)
         return options
 
-    def _update_config_from_options(self, options) -> None:
+    def _update_config_from_options(self, options: object) -> None:
 
         for name, value in self.config.items():
             if name not in self.exclude_print_config:

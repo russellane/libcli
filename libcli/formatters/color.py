@@ -64,7 +64,7 @@ class ColorHelpFormatter(argparse.RawDescriptionHelpFormatter):
 
         # long action name; start on the next line
         else:
-            tup = self._current_indent, "", action_header  # type: ignore
+            tup = self._current_indent, "", action_header
             action_header = "%*s%s\n" % tup  # noqa: f-string
             indent_first = help_position
 
@@ -91,7 +91,7 @@ class ColorHelpFormatter(argparse.RawDescriptionHelpFormatter):
         # return a single string
         return self._join_parts(parts)
 
-    def add_text(self, text) -> None:
+    def add_text(self, text: str | None) -> None:
         """Colorize and add `text` to section."""
         if text:
             text = _colorize_text(text)

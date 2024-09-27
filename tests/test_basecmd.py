@@ -95,49 +95,49 @@ class SecondCmd(BaseCmd):
 # -------------------------------------------------------------------------------
 
 
-def test_version():
+def test_version() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--version"])
     assert err.value.code == 0
 
 
-def test_help():
+def test_help() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--help"])
     assert err.value.code == 0
 
 
-def test_md_help():
+def test_md_help() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--md-help"])
     assert err.value.code == 0
 
 
-def test_long_help():
+def test_long_help() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--long-help"])
     assert err.value.code == 0
 
 
-def test_bogus_option():
+def test_bogus_option() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--bogus-option"])
     assert err.value.code == 2
 
 
-def test_bogus_argument():
+def test_bogus_argument() -> None:
     with pytest.raises(SystemExit) as err:
         main(["bogus-argument"])
     assert err.value.code == 2
 
 
-def test_print_config():
+def test_print_config() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--print-config"])
     assert err.value.code == 0
 
 
-def test_print_url():
+def test_print_url() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--print-url"])
     assert err.value.code == 0
@@ -146,68 +146,68 @@ def test_print_url():
 # -------------------------------------------------------------------------------
 
 
-def test_first_help():
+def test_first_help() -> None:
     with pytest.raises(SystemExit) as err:
         main(["first", "--help"])
     assert err.value.code == 0
 
 
-def test_first_bogus_option():
+def test_first_bogus_option() -> None:
     with pytest.raises(SystemExit) as err:
         main(["first", "--bogus-option"])
     assert err.value.code == 2
 
 
-def test_first_bogus_argument():
+def test_first_bogus_argument() -> None:
     with pytest.raises(SystemExit) as err:
         main(["first", "bogus-argument"])
     assert err.value.code == 2
 
 
-def test_first():
+def test_first() -> None:
     main(["first"])
 
 
-def test_first_option_missing():
+def test_first_option_missing() -> None:
     with pytest.raises(SystemExit) as err:
         main(["first", "--first-opt"])
     assert err.value.code == 2
 
 
-def test_first_option_ok():
+def test_first_option_ok() -> None:
     main(["first", "--first-opt", "hello"])
 
 
 # -------------------------------------------------------------------------------
 
 
-def test_second_help():
+def test_second_help() -> None:
     with pytest.raises(SystemExit) as err:
         main(["second", "--help"])
     assert err.value.code == 0
 
 
-def test_second_bogus_option():
+def test_second_bogus_option() -> None:
     with pytest.raises(SystemExit) as err:
         main(["second", "--bogus-option"])
     assert err.value.code == 2
 
 
-def test_second_bogus_argument():
+def test_second_bogus_argument() -> None:
     with pytest.raises(SystemExit) as err:
         main(["second", "bogus-argument"])
     assert err.value.code == 2
 
 
-def test_second():
+def test_second() -> None:
     main(["second"])
 
 
-def test_second_option_missing():
+def test_second_option_missing() -> None:
     with pytest.raises(SystemExit) as err:
         main(["second", "--second-opt"])
     assert err.value.code == 2
 
 
-def test_second_option_ok():
+def test_second_option_ok() -> None:
     main(["second", "--second-opt", "hello"])

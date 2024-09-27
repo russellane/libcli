@@ -33,74 +33,74 @@ def main(args: list[str] | None = None) -> None:
     SimpleCLI(args).main()
 
 
-def test_version():
+def test_version() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--version"])
     assert err.value.code == 0
 
 
-def test_help():
+def test_help() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--help"])
     assert err.value.code == 0
 
 
-def test_md_help():
+def test_md_help() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--md-help"])
     assert err.value.code == 0
 
 
-def test_long_help():
+def test_long_help() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--long-help"])
     assert err.value.code == 2
 
 
-def test_bogus_option():
+def test_bogus_option() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--bogus-option"])
     assert err.value.code == 2
 
 
-def test_bogus_argument():
+def test_bogus_argument() -> None:
     with pytest.raises(SystemExit) as err:
         main(["bogus-argument"])
     assert err.value.code == 2
 
 
-def test_print_config():
+def test_print_config() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--print-config"])
     assert err.value.code == 0
 
 
-def test_print_url():
+def test_print_url() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--print-url"])
     assert err.value.code == 0
 
 
-def test_debug():
+def test_debug() -> None:
     with pytest.raises(SystemExit) as err:
         main(["-X"])
     assert err.value.code == 0
 
 
-def test_completion():
+def test_completion() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--completion"])
     assert err.value.code == 0
 
 
-def test_completion_bogus():
+def test_completion_bogus() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--completion", "bogus"])
     assert err.value.code == 2
 
 
 @pytest.mark.parametrize("shell", ["bash", "fish", "tcsh"])
-def test_completion_shell(shell):
+def test_completion_shell(shell: str) -> None:
     with pytest.raises(SystemExit) as err:
         main(["--completion", shell])
     assert err.value.code == 0
