@@ -5,6 +5,8 @@ from typing import Any, Sequence
 
 from libcli.actions.basehelp import BaseHelpAction
 
+__all__ = ["LongMarkdownHelpAction"]
+
 
 class LongMarkdownHelpAction(BaseHelpAction):
     """Print help for all commands in markdown."""

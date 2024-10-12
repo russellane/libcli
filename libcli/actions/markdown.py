@@ -6,6 +6,8 @@ from typing import Any, Sequence
 from libcli.actions.basehelp import BaseHelpAction
 from libcli.formatters.markdown import MarkdownHelpFormatter
 
+__all__ = ["MarkdownHelpAction"]
+
 
 class MarkdownHelpAction(BaseHelpAction):
     """Print help in markdown."""

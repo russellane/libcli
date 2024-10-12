@@ -7,6 +7,8 @@ from typing import Iterable
 
 from colors.colors import color as _color  # type: ignore
 
+__all__ = ["ColorHelpFormatter"]
+
 _color_code_span = functools.partial(_color, fg="yellow")
 _color_header = functools.partial(_color, fg="cyan")
 _color_title = functools.partial(_color, fg="yellow", style="bold")

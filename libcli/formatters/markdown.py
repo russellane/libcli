@@ -7,6 +7,8 @@ from typing import Any, Iterable
 
 import tomli
 
+__all__ = ["MarkdownHelpFormatter"]
+
 
 class MarkdownHelpFormatter(argparse.RawDescriptionHelpFormatter):
     """Render help in `markdown` format."""

@@ -8,6 +8,8 @@ from typing import Any
 from libcli.actions.basehelp import BaseHelpAction
 from libcli.options.base import BaseOption
 
+__all__ = ["PrintUrlOption"]
+
 
 class PrintUrlOption(BaseOption):
     # pylint: disable=too-few-public-methods

@@ -2,6 +2,8 @@
 
 import argparse
 
+__all__ = ["BaseAction"]
+
 
 class BaseAction(argparse.Action):
     # pylint: disable=abstract-method

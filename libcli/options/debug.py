@@ -7,6 +7,8 @@ from typing import Any
 from libcli.actions.basehelp import BaseHelpAction
 from libcli.options.base import BaseOption
 
+__all__ = ["DebugOption"]
+
 
 class DebugOption(BaseOption):
     # pylint: disable=too-few-public-methods

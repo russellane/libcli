@@ -1,6 +1,10 @@
+import sys
+
 import pytest
 
 from libcli import BaseCLI
+
+sys.argv = [sys.argv[0]]
 
 
 class SimpleCLI(BaseCLI):
@@ -31,6 +35,18 @@ class SimpleCLI(BaseCLI):
 def main(args: list[str] | None = None) -> None:
     """Command line interface entry point (function)."""
     SimpleCLI(args).main()
+
+
+def test_no_args() -> None:
+    main()
+
+
+def test_none_args() -> None:
+    main(None)
+
+
+def test_empty_args() -> None:
+    main([])
 
 
 def test_version() -> None:

@@ -7,6 +7,8 @@ from typing import Any, Sequence
 from libcli.actions.base import BaseAction
 from libcli.options.base import BaseOption
 
+__all__ = ["CompletionOption"]
+
 
 class CompletionOption(BaseOption):
     # pylint: disable=too-few-public-methods

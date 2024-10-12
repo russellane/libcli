@@ -2,6 +2,8 @@
 
 import argparse
 
+__all__ = ["BaseHelpAction"]
+
 
 class BaseHelpAction(argparse._HelpAction):
     # pylint: disable=protected-access
