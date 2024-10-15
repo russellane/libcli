@@ -375,6 +375,15 @@ class BaseCLI:
         """Make `textwrap.dedent` convenient."""
         return textwrap.dedent(text).strip()
 
+    @staticmethod
+    def hideuser(path: Path) -> Path:
+        """Replace home with tilde; complements `Path.expanduser`."""
+        _path = str(path)
+        _home = str(Path.home())
+        if not _path.startswith(_home):
+            return path
+        return Path("~" + _path[len(_home) :])
+
     def error(self, text: str) -> None:
         """Print an ERROR message to `stdout`."""
         _ = self  # unused; avoiding @staticmethod
