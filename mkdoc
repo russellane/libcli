@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""Docstring."""
+
+import importlib
+import inspect
+import sys
+from textwrap import dedent
+
+
+class MakeDoc:
+    """Docstring."""
+
+    def main(self) -> None:
+        """Docstring."""
+
+        if len(sys.argv) != 2:
+            print(f"Usage: {sys.argv[0]} module", file=sys.stderr)
+            sys.exit(2)
+
+        modname = sys.argv[1]
+        mod = importlib.import_module(modname)
+
+        print(f"## {modname}")
+        print()
+        print(self.dedent_doc(mod.__doc__))
+        print()
+
+        # members = inspect.getmembers(mod)
+        # for member in [x for x in members if not x[0].startswith("_")]:
+        #     print(f"member={member}")
+
+        # print(f"__all__={mod.__all__}")
+
+        # for symbol in [x for x in dir(mod) if not x.startswith("_")]:
+        for symbol in mod.__all__:
+            obj = getattr(mod, symbol)
+            if inspect.isclass(obj):
+                # print(f"Skipping CLASS {symbol!r}")
+                print(f"### class {symbol}")
+                print()
+                print(self.dedent_doc(obj.__doc__))
+                print()
+            elif inspect.isfunction(obj):
+                # print(f"Skipping FUNCTION {symbol!r}")
+                print(f"### function {symbol}")
+                print()
+                print(self.dedent_doc(obj.__doc__))
+                print()
+            elif inspect.ismethod(obj):
+                # print(f"Skipping METHOD {symbol!r}")
+                print(f"### method {symbol}")
+                print()
+                print(self.dedent_doc(obj.__doc__))
+                print()
+            elif inspect.ismodule(obj):
+                pass  # print(f"Skipping MODULE {symbol!r}")
+            else:
+                print("<unhandled>")
+
+    def dedent_doc(self, doc: str | None) -> str:
+        """Dedent and return the docstring."""
+
+        if not doc:
+            return doc
+
+        try:
+            i = doc.index("\n")
+        except ValueError:
+            return doc
+
+        s = doc[:i]
+        while doc[i] == "\n":
+            s += "\n"
+            i += 1
+
+        s += dedent(doc[i:])
+        return s
+
+
+if __name__ == "__main__":
+    MakeDoc().main()
