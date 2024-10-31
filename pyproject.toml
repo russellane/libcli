@@ -1,6 +1,6 @@
 [project]
 name = "rlane-libcli"
-version = "1.0.6"
+version = "1.0.7"
 description = "Command line interface framework"
 authors = [
     {name = "Russel Lane", email = "russel@rlane.com"},
