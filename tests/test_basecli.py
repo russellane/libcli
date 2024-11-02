@@ -97,12 +97,6 @@ def test_print_url() -> None:
     assert err.value.code == 0
 
 
-def test_debug() -> None:
-    with pytest.raises(SystemExit) as err:
-        main(["-X"])
-    assert err.value.code == 0
-
-
 def test_completion() -> None:
     with pytest.raises(SystemExit) as err:
         main(["--completion"])

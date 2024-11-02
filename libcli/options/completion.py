@@ -43,7 +43,7 @@ class CompletionAction(BaseAction):
         argv = [
             "register-python-argcomplete",
             "-s",
-            values if values else namespace.shell,
+            str(values) if values else namespace.shell,
             parser.prog,
         ]
         proc = subprocess.run(argv, check=False)

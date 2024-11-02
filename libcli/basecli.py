@@ -35,7 +35,6 @@ from libcli.actions.longmarkdown import LongMarkdownHelpAction
 from libcli.actions.markdown import MarkdownHelpAction
 from libcli.formatters.color import ColorHelpFormatter
 from libcli.options.completion import CompletionOption
-from libcli.options.debug import DebugOption
 from libcli.options.printconfig import PrintConfigOption
 from libcli.options.printurl import PrintUrlOption
 
@@ -445,8 +444,6 @@ class BaseCLI:
         """Add common options to given `parser`."""
 
         group = parser.add_argument_group("General options")
-
-        DebugOption(group)
 
         group.add_argument(
             "-h",
