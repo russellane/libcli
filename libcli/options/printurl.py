@@ -41,6 +41,6 @@ class PrintUrlAction(BaseHelpAction):
             # https://packaging.python.org/en/latest/specifications/core-metadata/#project-url-multiple-use
             distro = importlib.metadata.distribution(namespace.cli.distname)
             if distro is not None and distro.metadata is not None:
-                print(distro.metadata.get("Project-URL", ""))  # type: ignore[attr-defined]
+                print(distro.metadata.get("Project-URL", ""))
 
         parser.exit()
