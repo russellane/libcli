@@ -66,20 +66,25 @@ class HelpMixin:  # pylint: disable=too-few-public-methods
         else:
             formatter_class = ColorHelpFormatter
 
-        if self.parser.formatter_class == argparse.HelpFormatter:
-            self.parser.formatter_class = formatter_class
+        self._finalize_parser(self.parser, formatter_class)
 
-        for action in self.parser._actions:
+    def _finalize_parser(
+        self,
+        parser: argparse.ArgumentParser,
+        formatter_class: type[argparse.HelpFormatter],
+    ) -> None:
+        """Recursively finalize a parser and all its subparsers."""
+
+        if parser.formatter_class == argparse.HelpFormatter:
+            parser.formatter_class = formatter_class
+
+        for action in parser._actions:
             if isinstance(action, argparse._SubParsersAction):
                 for choice in action._choices_actions:
                     choice.help = self._normalize_help_text(choice.help)
                 for subparser in action.choices.values():
-                    if subparser.formatter_class == argparse.HelpFormatter:
-                        subparser.formatter_class = formatter_class
-                    if subparser._actions:
-                        for subact in subparser._actions:
-                            subact.help = self._normalize_help_text(subact.help)
-                            self._apply_env_default(subact)
+                    # Recursively finalize nested subparsers
+                    self._finalize_parser(subparser, formatter_class)
             else:
                 action.help = self._normalize_help_text(action.help)
                 self._apply_env_default(action)
