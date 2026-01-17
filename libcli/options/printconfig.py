@@ -1,8 +1,9 @@
 """Print effective config and exit."""
 
 import argparse
-from pprint import pformat
 from typing import Any
+
+import tomli_w
 
 from libcli.actions.basehelp import BaseHelpAction
 from libcli.options.base import BaseOption
@@ -41,10 +42,22 @@ class PrintConfigAction(BaseHelpAction):
             if name not in namespace.cli.exclude_print_config:
                 optname = name.replace("-", "_")
                 value = getattr(namespace, optname, value)
-                config[name] = value if isinstance(value, (int, str)) else str(value)
+                config[name] = self._toml_value(value)
 
         if (name := namespace.cli.config.get("config-name")) is not None:
             config = {name: config}
 
-        print(pformat(config))
+        print(tomli_w.dumps(config))
         parser.exit()
+
+    @staticmethod
+    def _toml_value(value: Any) -> Any:
+        """Convert value to TOML-compatible type."""
+        if isinstance(value, (bool, int, float, str)):
+            return value
+        if isinstance(value, list):
+            return [PrintConfigAction._toml_value(v) for v in value]
+        if isinstance(value, dict):
+            return {k: PrintConfigAction._toml_value(v) for k, v in value.items()}
+        # Convert Path and other types to string
+        return str(value)
