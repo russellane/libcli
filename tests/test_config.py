@@ -26,14 +26,18 @@ def config_file_() -> Iterator[str]:
     os.unlink(name)
 
 
-def test_print_config_enoent() -> None:
+def test_print_config_enoent(capsys: pytest.CaptureFixture[str]) -> None:
 
     class CLI(BaseCLI):
-        pass
+        config = {"config-file": "~/.myapp.toml"}  # enables --config option
 
     with pytest.raises(SystemExit) as err:
         CLI(["--config", "./cant/find/me"])
     assert err.value.code == 2
+
+    captured = capsys.readouterr()
+    assert "config file not found" in captured.err
+    assert "cant/find/me" in captured.err
 
 
 def test_print_config(config_file: str) -> None:
