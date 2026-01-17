@@ -8,6 +8,8 @@ from typing import Any
 
 import tomli
 
+from libcli.exceptions import ConfigFileNotFoundError
+
 __all__ = ["ConfigMixin"]
 
 
@@ -18,6 +20,7 @@ class ConfigMixin:  # pylint: disable=too-few-public-methods
     exclude_print_config: list[str]
     options: argparse.Namespace
     argv: list[str] | None
+    _config_error: ConfigFileNotFoundError | None = None
 
     def init_config(self) -> None:
         """Parse command line to load contents of `--config FILE` only.
@@ -77,12 +80,14 @@ class ConfigMixin:  # pylint: disable=too-few-public-methods
             _path = Path(self.options.config_file).expanduser()
             _text = _path.read_text(encoding="utf-8")
             config = tomli.loads(_text)
-        except FileNotFoundError as err:
+        except FileNotFoundError:
             if self.options.config_file != self.config["config-file"]:
                 # postpone calling `parser.error` to full parser.
-                self.config["config-file"] = err
+                self._config_error = ConfigFileNotFoundError(str(self.options.config_file))
             else:
-                self.debug(f"{err}; ignoring.")  # type: ignore[attr-defined]
+                self.debug(  # type: ignore[attr-defined]
+                    f"config file not found: {self.options.config_file}; ignoring."
+                )
             return
 
         if (section := self.config.get("config-name")) is not None:

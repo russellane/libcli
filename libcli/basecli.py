@@ -207,9 +207,9 @@ class BaseCLI(ConfigMixin, LoggingMixin, OptionsMixin, SubcommandMixin, HelpMixi
 
         options = self.parser.parse_args(self.argv)
 
-        if isinstance(self.config.get("config-file"), Exception):
-            # postponed from load_config
-            self.parser.error(self.config["config-file"])
+        if self._config_error:
+            # postponed from init_config
+            self.parser.error(str(self._config_error))
 
         self._update_config_from_options(options)
         return options
