@@ -147,16 +147,38 @@ class BaseCmd:
         """Implement in subclass to call `add_subcommand_parser` and `add_argument`."""
         # raise NotImplementedError
 
-    def add_subcommand_parser(self, name: str, **kwargs: Any) -> argparse.ArgumentParser:
+    def add_subcommand_parser(
+        self,
+        name: str,
+        aliases: list[str] | None = None,
+        **kwargs: Any,
+    ) -> argparse.ArgumentParser:
         """Add subcommand to main parser and return subcommand's subparser.
 
         Wrap `argparse.ArgumentParser.add_subparsers.add_parser`.
 
+        Args:
+            name: Primary name for the command.
+            aliases: Alternative names for the command (e.g., ["mv", "rename"]).
+            **kwargs: Additional arguments passed to add_parser.
+
+        Returns:
+            The subcommand's ArgumentParser.
+
         Side Effects:
             `parser.options.cmd` is set to call the subcommand's `run` method.
+
+        Example:
+            parser = self.add_subcommand_parser(
+                "move",
+                aliases=["mv"],
+                help="Move a file",
+            )
         """
 
         assert self.cli.add_parser
+        if aliases:
+            kwargs["aliases"] = aliases
         parser = self.cli.add_parser(name, **kwargs)
         parser.set_defaults(cmd=lambda: self._promote_options(self.run), prog=name)
         return parser
