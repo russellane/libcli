@@ -19,6 +19,7 @@ with contextlib.suppress(ImportError):
 
 from libcli.helpers import dedent, hideuser
 from libcli.mixins.config import ConfigMixin
+from libcli.mixins.env import EnvMixin
 from libcli.mixins.help import HelpMixin
 from libcli.mixins.logging import LoggingMixin
 from libcli.mixins.options import OptionsMixin
@@ -27,7 +28,7 @@ from libcli.mixins.subcommands import SubcommandMixin
 __all__ = ["BaseCLI"]
 
 
-class BaseCLI(ConfigMixin, LoggingMixin, OptionsMixin, SubcommandMixin, HelpMixin):
+class BaseCLI(ConfigMixin, EnvMixin, LoggingMixin, OptionsMixin, SubcommandMixin, HelpMixin):
     """Command line interface base class.
 
     $ cat minimal.py

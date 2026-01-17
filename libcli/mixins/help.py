@@ -79,5 +79,24 @@ class HelpMixin:  # pylint: disable=too-few-public-methods
                     if subparser._actions:
                         for subact in subparser._actions:
                             subact.help = self._normalize_help_text(subact.help)
+                            self._apply_env_default(subact)
             else:
                 action.help = self._normalize_help_text(action.help)
+                self._apply_env_default(action)
+
+    def _apply_env_default(self, action: argparse.Action) -> None:
+        """Apply environment variable default to action if available."""
+        # Skip actions that don't take values or have special handling
+        if action.option_strings and action.dest not in ("help", "version"):
+            env_value = self.env_default(action.dest, None)  # type: ignore[attr-defined]
+            if env_value is not None:
+                # Determine type from existing default or const
+                if action.type is not None and callable(action.type):
+                    action.default = action.type(env_value)
+                elif action.default is not None:
+                    action.default = type(action.default)(env_value)
+                elif isinstance(action.const, bool):
+                    # store_true/store_false actions
+                    action.default = str(env_value).lower() in ("1", "true", "yes", "on")
+                else:
+                    action.default = env_value

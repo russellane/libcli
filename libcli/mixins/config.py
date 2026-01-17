@@ -42,6 +42,9 @@ class ConfigMixin:  # pylint: disable=too-few-public-methods
             "config-name": None,
             # distribution name, not importable package name
             "dist-name": None,
+            # environment variable prefix (e.g., "MYAPP" for MYAPP_VERBOSE)
+            # optional: defaults to uppercase config-name or prog
+            "env-prefix": None,
             # --verbose
             "verbose": 0,
         }
