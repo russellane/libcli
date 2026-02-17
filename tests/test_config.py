@@ -11,15 +11,11 @@ from libcli import BaseCLI
 def config_file_() -> Iterator[str]:
     fd, name = mkstemp()
     with os.fdopen(fd, mode="w", encoding="utf-8") as fp:
-        fp.write(
-            BaseCLI.dedent(
-                """
+        fp.write(BaseCLI.dedent("""
                 [myapp]
                 name = "Rumpelstiltskin"
                 value = 42
-                """
-            )
-        )
+                """))
         fp.close()
         yield name
     #
