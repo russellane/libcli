@@ -3,6 +3,6 @@ PROJECT = libcli
 COV_FAIL_UNDER = 90
 lint :: mypy
 doc :: mkdoc-readme
-mkdoc-readme:
-	./mkdoc $(PROJECT) >README.md
 .PHONY: mkdoc-readme
+mkdoc-readme:
+	pdm run ./mkdoc $(PROJECT) >README.md
