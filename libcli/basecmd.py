@@ -1,9 +1,12 @@
 """Base command class."""
 
-import argparse
-from typing import Any, Callable
+from __future__ import annotations
 
-from libcli.basecli import BaseCLI
+import argparse
+from typing import TYPE_CHECKING, Any, Callable
+
+if TYPE_CHECKING:
+    from libcli.basecli import BaseCLI
 
 __all__ = ["BaseCmd"]
 
@@ -122,7 +125,7 @@ class BaseCmd:
 
     """
 
-    def __init__(self, cli: BaseCLI) -> None:
+    def __init__(self, cli: BaseCLI | BaseCmd) -> None:
         """Initialize base command instance.
 
         After setting `self.cli`, the constructor calls these public methods,
@@ -131,15 +134,27 @@ class BaseCmd:
             init_command: should call `self.add_subcommand_parser` and `add_argument`.
 
         Args:
-            cli: the CLI.
+            cli: the CLI or parent command.
 
         Attributes:
-            cli: the CLI.
+            cli: the root CLI (for accessing options after parsing).
+            parent: the immediate parent (CLI or command).
+            parser: this command's parser (set by add_subcommand_parser).
+            add_parser: function to add nested subcommands (set by add_subcommand_classes).
             options: will contain results of `parse_args` when `run` is called.
 
         """
 
-        self.cli = cli
+        # Store both root CLI and immediate parent
+        if isinstance(cli, BaseCmd):
+            self.parent: BaseCLI | BaseCmd = cli
+            self.cli: BaseCLI = cli.cli
+        else:
+            self.parent = cli
+            self.cli = cli
+
+        self.parser: argparse.ArgumentParser
+        self.add_parser: Callable[..., argparse.ArgumentParser] | None = None
         self.options: argparse.Namespace
         self.init_command()
 
@@ -147,19 +162,66 @@ class BaseCmd:
         """Implement in subclass to call `add_subcommand_parser` and `add_argument`."""
         # raise NotImplementedError
 
-    def add_subcommand_parser(self, name: str, **kwargs: Any) -> argparse.ArgumentParser:
-        """Add subcommand to main parser and return subcommand's subparser.
+    def add_subcommand_parser(
+        self,
+        name: str,
+        aliases: list[str] | None = None,
+        **kwargs: Any,
+    ) -> argparse.ArgumentParser:
+        """Add subcommand to parent parser and return this command's parser.
 
         Wrap `argparse.ArgumentParser.add_subparsers.add_parser`.
 
+        Args:
+            name: Primary name for the command.
+            aliases: Alternative names for the command (e.g., ["mv", "rename"]).
+            **kwargs: Additional arguments passed to add_parser.
+
+        Returns:
+            The subcommand's ArgumentParser.
+
         Side Effects:
             `parser.options.cmd` is set to call the subcommand's `run` method.
+
+        Example:
+            parser = self.add_subcommand_parser(
+                "move",
+                aliases=["mv"],
+                help="Move a file",
+            )
         """
 
-        assert self.cli.add_parser
-        parser = self.cli.add_parser(name, **kwargs)
-        parser.set_defaults(cmd=lambda: self._promote_options(self.run), prog=name)
-        return parser
+        assert self.parent.add_parser
+        if aliases:
+            kwargs["aliases"] = aliases
+        self.parser = self.parent.add_parser(name, **kwargs)
+        self.parser.set_defaults(cmd=lambda: self._promote_options(self.run), prog=name)
+        return self.parser
+
+    def add_subcommand_classes(self, subcommand_classes: list[type[BaseCmd]]) -> None:
+        """Add nested subcommands to this command.
+
+        Call this method after `add_subcommand_parser` to add subcommands
+        to this command, creating a command hierarchy.
+
+        Args:
+            subcommand_classes: List of BaseCmd subclasses to add as subcommands.
+
+        Example:
+            class RemoteCmd(BaseCmd):
+                def init_command(self) -> None:
+                    self.add_subcommand_parser("remote", help="Manage remotes")
+                    self.add_subcommand_classes([RemoteAddCmd, RemoteRemoveCmd])
+
+                def run(self) -> None:
+                    # Called if no subcommand given
+                    self.parser.print_help()
+        """
+
+        subparsers = self.parser.add_subparsers(metavar="COMMAND", title="Specify one of")
+        self.add_parser = subparsers.add_parser
+        for subcommand_class in subcommand_classes:
+            subcommand_class(self)
 
     def _promote_options(self, run: Callable[[], None]) -> None:
         self.options = self.cli.options
