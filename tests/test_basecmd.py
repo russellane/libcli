@@ -11,8 +11,7 @@ class ComplexCLI(BaseCLI):
     def init_parser(self) -> None:
         self.ArgumentParser(
             prog="complex",
-            description=self.dedent(
-                """
+            description=self.dedent("""
     This is the `ComplexCLI` program.
 
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -22,8 +21,7 @@ class ComplexCLI(BaseCLI):
     velit `esse cillum dolore eu` fugiat nulla pariatur. Excepteur sint
     occaecat cupidatat non proident, sunt in culpa qui officia deserunt
     mollit anim id est laborum.
-                """
-            ),
+                """),
         )
 
     def add_arguments(self) -> None:

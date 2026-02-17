@@ -13,8 +13,7 @@ class SimpleCLI(BaseCLI):
     def init_parser(self) -> None:
         self.ArgumentParser(
             prog="simple",
-            description=self.dedent(
-                """
+            description=self.dedent("""
     This is the `SimpleCLI` program.
 
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -24,8 +23,7 @@ class SimpleCLI(BaseCLI):
     velit `esse cillum dolore eu` fugiat nulla pariatur. Excepteur sint
     occaecat cupidatat non proident, sunt in culpa qui officia deserunt
     mollit anim id est laborum.
-                """
-            ),
+                """),
         )
 
     def main(self) -> None:
