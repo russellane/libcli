@@ -62,7 +62,6 @@ class ConfigMixin:  # pylint: disable=too-few-public-methods
         self._update_config_from_file()
 
     def _update_config_from_file(self) -> None:
-
         # sneak a peak for `--verbose` and `--config FILE`.
         parser = argparse.ArgumentParser(add_help=False)
         self._add_verbose_option(parser)  # type: ignore[attr-defined]
@@ -104,7 +103,6 @@ class ConfigMixin:  # pylint: disable=too-few-public-methods
         self.config.update(config)
 
     def _update_config_from_options(self, options: object) -> None:
-
         for name, value in self.config.items():
             if name not in self.exclude_print_config:
                 optname = name.replace("-", "_")

@@ -56,18 +56,18 @@ class ColorHelpFormatter(argparse.RawDescriptionHelpFormatter):
         # no help; start on same line and add a final newline
         if not action.help:
             tup = self._current_indent, "", action_header
-            action_header = "%*s%s\n" % tup  # noqa: f-string
-
+            action_header = "%*s%s\n" % tup
         # short action name; start on the same line and pad two spaces
         elif len(action_header) <= action_width:
+            # mypy can't verify tuple structure for dynamic-width `%*s` format specifiers
             tup = self._current_indent, "", action_width, action_header  # type: ignore
-            action_header = "%*s%-*s  " % tup  # type: ignore  # noqa: f-string
+            action_header = "%*s%-*s  " % tup  # type: ignore
             indent_first = 0
 
         # long action name; start on the next line
         else:
             tup = self._current_indent, "", action_header
-            action_header = "%*s%s\n" % tup  # noqa: f-string
+            action_header = "%*s%s\n" % tup
             indent_first = help_position
 
         # collect the pieces of the action help
@@ -78,10 +78,9 @@ class ColorHelpFormatter(argparse.RawDescriptionHelpFormatter):
             help_text = self._expand_help(action)
             help_text = _colorize_text(help_text)
             help_lines = self._split_lines(help_text, help_width)
-            parts.append("%*s%s\n" % (indent_first, "", help_lines[0]))  # noqa: f-string
+            parts.append("%*s%s\n" % (indent_first, "", help_lines[0]))
             for line in help_lines[1:]:
-                parts.append("%*s%s\n" % (help_position, "", line))  # noqa: f-string
-
+                parts.append("%*s%s\n" % (help_position, "", line))
         # or add a newline if the description doesn't end with one
         elif not action_header.endswith("\n"):
             parts.append("\n")  # pragma: no cover

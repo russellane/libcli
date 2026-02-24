@@ -28,7 +28,6 @@ class ComplexCLI(BaseCLI):
         self.add_subcommand_classes([FirstCmd, SecondCmd])
 
     def main(self) -> None:
-
         if not self.options.cmd:
             self.parser.print_help()
             self.parser.exit(2, "error: Missing COMMAND\n")
@@ -45,7 +44,6 @@ class FirstCmd(BaseCmd):
     """First subcommand of ComplexCLI."""
 
     def init_command(self) -> None:
-
         parser = self.add_subcommand_parser(
             "first",
             help="help for the `first` command",
@@ -62,7 +60,6 @@ class SecondCmd(BaseCmd):
     """Second subcommand of ComplexCLI."""
 
     def init_command(self) -> None:
-
         parser = self.add_subcommand_parser(
             "second",
             help="help for the `second` command",

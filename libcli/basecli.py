@@ -168,7 +168,8 @@ class BaseCLI(ConfigMixin, EnvMixin, LoggingMixin, OptionsMixin, SubcommandMixin
     def add_arguments(self) -> None:
         """Implement in subclass, probably desired."""
 
-    def ArgumentParser(  # noqa: N802  pylint: disable=invalid-name
+    # N802: function name matches argparse.ArgumentParser() naming convention.
+    def ArgumentParser(  # noqa: N802
         self, **kwargs: str
     ) -> argparse.ArgumentParser:
         """Wrap and return results from `argparse.ArgumentParser`.

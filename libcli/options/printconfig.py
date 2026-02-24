@@ -38,10 +38,10 @@ class PrintConfigAction(BaseHelpAction):
         """Print effective config and exit."""
 
         config: dict[str, Any] = {}
-        for name, value in namespace.cli.config.items():
+        for name, cfg_value in namespace.cli.config.items():
             if name not in namespace.cli.exclude_print_config:
                 optname = name.replace("-", "_")
-                value = getattr(namespace, optname, value)
+                value = getattr(namespace, optname, cfg_value)
                 config[name] = self._toml_value(value)
 
         if (name := namespace.cli.config.get("config-name")) is not None:

@@ -81,7 +81,6 @@ class MarkdownHelpFormatter(argparse.RawDescriptionHelpFormatter):
         groups: Any,
         prefix: str | None,
     ) -> str:
-
         usage_text = super()._format_usage(usage, actions, groups, prefix)
 
         lines = usage_text.splitlines(keepends=True)

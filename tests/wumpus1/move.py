@@ -5,7 +5,6 @@ class Command(BaseCmd):
     """Move subcommand of Wumpus."""
 
     def init_command(self) -> None:
-
         parser = self.add_subcommand_parser(
             "move",
             help="help for the `move` command",

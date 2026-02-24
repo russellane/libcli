@@ -26,7 +26,6 @@ class WumpusCLI(BaseCLI):
         self.add_subcommand_modules("tests.wumpus3", prefix="Wumpus")
 
     def main(self) -> None:
-
         if not self.options.cmd:
             self.parser.print_help()
             self.parser.exit(2, "error: Missing COMMAND\n")
